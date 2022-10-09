@@ -1,7 +1,6 @@
 {
     "name": "api-check/php-laravel-client",
     "description": "ApiCheck wrapper for Laravel",
-    "type": "project",
     "require": {
         "api-check/php-client": "^1.0",
         "php": "^7.1|^8.0",
