@@ -16,6 +16,17 @@
             "ApiCheck\\PhpLaravelClient\\": "src/"
         }
     },
+    "prefer-stable" : true,
+    "extra": {
+      "laravel": {
+        "providers": [
+          "ApiCheck\\Laravel\\ServiceProvider"
+        ],
+        "aliases": {
+          "ApiCheck": "ApiCheck\\Laravel\\Facades\\Spikkl"
+        }
+      }
+    },
     "authors": [
         {
             "name": "ApiCheck",
