@@ -23,7 +23,7 @@
           "ApiCheck\\Laravel\\ServiceProvider"
         ],
         "aliases": {
-          "ApiCheck": "ApiCheck\\Laravel\\Facades\\Spikkl"
+          "ApiCheck": "ApiCheck\\Laravel\\Facades\\ApiCheck"
         }
       }
     },
