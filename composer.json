@@ -23,7 +23,7 @@
     "ext-curl": "*",
     "ext-json": "*",
     "guzzlehttp/guzzle": "^6.4|^7.0",
-    "api-check/php-client": "^1.0"
+    "apicheck/php-client": "^1.0"
   },
   "require-dev": {
     "orchestra/testbench": "3.8.*|4.*|5.*|6.*",
