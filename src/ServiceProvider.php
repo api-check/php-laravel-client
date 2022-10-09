@@ -10,7 +10,7 @@ use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 class ServiceProvider extends BaseServiceProvider
 {
-    const PACKAGE_VERSION = '1.0.0';
+    const PACKAGE_VERSION = '1.0';
 
     /**
      * Boot the service provider.
