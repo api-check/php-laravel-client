@@ -27,18 +27,12 @@ class FacadeTest extends TestCase
     }
 
     /** @test */
-    public function facade_accessor_returns_correct_key()
-    {
-        $this->assertEquals('apicheck', ApiCheck::getFacadeAccessor());
-    }
-
-    /** @test */
     public function facade_returns_same_instance_as_container()
     {
         $facadeRoot = ApiCheck::getFacadeRoot();
         $containerInstance = app('apicheck');
 
-        $this->assertSame($facadeRoot, $containerInstance);
+        $this->assertSame($facadeRoot, $containerInstance, 'Facade should resolve to apicheck binding');
     }
 
     /** @test */

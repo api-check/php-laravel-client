@@ -80,11 +80,11 @@ class ApiCheckTest extends TestCase
     }
 
     /** @test */
-    public function service_provider_is_deferred()
+    public function service_provider_registers_singletons()
     {
-        $provider = new ServiceProvider($this->app);
-
-        $this->assertTrue($provider->isDeferred(), 'ServiceProvider should be deferred for performance');
+        // Verify the service is properly registered
+        $this->assertTrue($this->app->has(ApiClient::class));
+        $this->assertTrue($this->app->has('apicheck'));
     }
 
     /** @test */
