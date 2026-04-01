@@ -1,16 +1,15 @@
 <?php
 
-use ApiCheck\Laravel\ApiClientAdapter;
+use ApiCheck\Api\ApiClient;
 
-if ( ! function_exists('apicheck')) {
-
+if (! function_exists('apicheck')) {
     /**
-     * Helper function to access the ApiCheck api instance.
+     * Get the ApiCheck API client instance.
      *
-     * @return ApiClientAdapter
+     * @return ApiClient
      */
-    function apicheck(): ApiClientAdapter
+    function apicheck(): ApiClient
     {
-        return resolve('apicheck.api');
+        return app('apicheck');
     }
 }

@@ -1,1 +1,8 @@
-/vendor/
+.DS_Store
+/build
+/docs
+/vendor
+/.phpunit.cache
+/.phpcs-cache
+/phpstan.neon
+/composer.lock

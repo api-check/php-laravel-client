@@ -1,36 +1,60 @@
 {
     "name": "api-check/php-laravel-client",
-    "description": "ApiCheck wrapper for Laravel",
-    "require": {
-        "api-check/php-client": "^1.0",
-        "php": "^7.1|^8.0",
-        "illuminate/support": "^6.0 | ^7.0 | ^8.0 | ^9.0"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^9.5"
-    },
+    "description": "ApiCheck wrapper for Laravel - address validation, search, and verification",
+    "keywords": [
+        "apicheck",
+        "laravel",
+        "address-validation",
+        "postal-code",
+        "address-api",
+        "email-verification",
+        "phone-verification"
+    ],
+    "homepage": "https://apicheck.nl/",
     "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "ApiCheck\\PhpLaravelClient\\": "src/"
-        }
-    },
-    "prefer-stable" : true,
-    "extra": {
-      "laravel": {
-        "providers": [
-          "ApiCheck\\Laravel\\ServiceProvider"
-        ],
-        "aliases": {
-          "ApiCheck": "ApiCheck\\Laravel\\Facades\\ApiCheck"
-        }
-      }
-    },
+    "type": "library",
     "authors": [
         {
             "name": "ApiCheck",
-            "email": "support@apicheck.nl"
+            "email": "support@apicheck.nl",
+            "role": "Developer"
         }
     ],
-    "minimum-stability": "stable"
+    "require": {
+        "php": "^8.1",
+        "illuminate/support": "^9.0|^10.0|^11.0",
+        "api-check/php-client": "^2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5|^11.0",
+        "orchestra/testbench": "^8.0|^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ApiCheck\\Laravel\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ApiCheck\\Laravel\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ApiCheck\\Laravel\\ServiceProvider"
+            ],
+            "aliases": {
+                "ApiCheck": "ApiCheck\\Laravel\\Facades\\ApiCheck"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }
