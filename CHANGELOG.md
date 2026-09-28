@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.1.0] - 2026-09-28
+## [3.0.0] - 2026-09-28
+
+### Changed
+- **BREAKING**: Requires Laravel 12 and PHP 8.2+. Laravel 10 and 11 are end-of-life and every
+  release has open security advisories, so Composer no longer installs them. Stay on 2.x for Laravel 10/11.
+- Tests use PHPUnit attributes instead of doc-comment annotations (PHPUnit 12 compatible)
 
 ### Added
 - Laravel 12 support
@@ -15,10 +20,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Resolving the client without an API key no longer fails with an unclear `TypeError`
 - Package config is now merged during `register()` so it is available to other providers before boot
 - README no longer lists Laravel 9 as supported
-
-### Changed
-- Tests use PHPUnit attributes instead of doc-comment annotations (PHPUnit 12 compatible)
-- CI no longer runs PHP 8.4 against Laravel 10 (unsupported combination)
 
 ### Removed
 - Unused `provides()` method on the service provider (the provider was never deferred)
