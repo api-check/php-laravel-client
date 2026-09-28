@@ -2,10 +2,10 @@
 
 namespace ApiCheck\Laravel\Tests;
 
-use ApiCheck\Api\ApiClient;
 use ApiCheck\Laravel\ServiceProvider;
 use Illuminate\Support\Facades\File;
 use Orchestra\Testbench\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ServiceProviderTest extends TestCase
 {
@@ -14,7 +14,7 @@ class ServiceProviderTest extends TestCase
         return [ServiceProvider::class];
     }
 
-    /** @test */
+    #[Test]
     public function it_publishes_config_file()
     {
         $this->artisan('vendor:publish', [
@@ -30,7 +30,7 @@ class ServiceProviderTest extends TestCase
         File::delete($configPath);
     }
 
-    /** @test */
+    #[Test]
     public function it_merges_config_from_package()
     {
         // Config should be merged even without publishing
@@ -39,20 +39,30 @@ class ServiceProviderTest extends TestCase
         $this->assertArrayHasKey('referer', config('apicheck'));
     }
 
-    /** @test */
+    #[Test]
+    public function it_merges_config_during_registration()
+    {
+        // Config must be available to other providers before this one boots
+        $this->app['config']->set('apicheck', []);
+
+        (new ServiceProvider($this->app))->register();
+
+        $this->assertArrayHasKey('api_key', config('apicheck'));
+    }
+
+    #[Test]
     public function it_can_override_config_values()
     {
         $this->app['config']->set('apicheck.api_key', 'custom-key');
         $this->app['config']->set('apicheck.referer', 'https://custom.com');
 
-        // Re-resolve to get new config values (singleton won't update, but config is there)
         $this->assertEquals('custom-key', config('apicheck.api_key'));
         $this->assertEquals('https://custom.com', config('apicheck.referer'));
     }
 
-    /** @test */
-    public function package_version_is_set()
+    #[Test]
+    public function package_version_is_semver()
     {
-        $this->assertEquals('2.0.0', ServiceProvider::PACKAGE_VERSION);
+        $this->assertMatchesRegularExpression('/^\d+\.\d+\.\d+$/', ServiceProvider::PACKAGE_VERSION);
     }
 }

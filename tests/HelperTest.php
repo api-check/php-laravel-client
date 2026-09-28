@@ -4,6 +4,7 @@ namespace ApiCheck\Laravel\Tests;
 
 use ApiCheck\Api\ApiClient;
 use Orchestra\Testbench\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class HelperTest extends TestCase
 {
@@ -17,13 +18,13 @@ class HelperTest extends TestCase
         $app['config']->set('apicheck.api_key', 'test-key');
     }
 
-    /** @test */
+    #[Test]
     public function apicheck_helper_exists()
     {
         $this->assertTrue(function_exists('apicheck'), 'The apicheck() helper should exist');
     }
 
-    /** @test */
+    #[Test]
     public function apicheck_helper_returns_api_client()
     {
         $client = apicheck();
@@ -31,7 +32,7 @@ class HelperTest extends TestCase
         $this->assertInstanceOf(ApiClient::class, $client);
     }
 
-    /** @test */
+    #[Test]
     public function apicheck_helper_returns_singleton()
     {
         $client1 = apicheck();
@@ -40,7 +41,7 @@ class HelperTest extends TestCase
         $this->assertSame($client1, $client2, 'Helper should return the same singleton instance');
     }
 
-    /** @test */
+    #[Test]
     public function apicheck_helper_allows_method_calls()
     {
         $client = apicheck();

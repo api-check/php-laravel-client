@@ -6,6 +6,7 @@ use ApiCheck\Api\ApiClient;
 use ApiCheck\Laravel\Facades\ApiCheck;
 use ApiCheck\Laravel\ServiceProvider;
 use Orchestra\Testbench\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class FacadeTest extends TestCase
 {
@@ -26,7 +27,7 @@ class FacadeTest extends TestCase
         $app['config']->set('apicheck.api_key', 'test-api-key');
     }
 
-    /** @test */
+    #[Test]
     public function facade_returns_same_instance_as_container()
     {
         $facadeRoot = ApiCheck::getFacadeRoot();
@@ -35,7 +36,7 @@ class FacadeTest extends TestCase
         $this->assertSame($facadeRoot, $containerInstance, 'Facade should resolve to apicheck binding');
     }
 
-    /** @test */
+    #[Test]
     public function facade_can_call_get_api_version()
     {
         $version = ApiCheck::getApiVersion();
@@ -43,7 +44,7 @@ class FacadeTest extends TestCase
         $this->assertEquals('v1', $version);
     }
 
-    /** @test */
+    #[Test]
     public function facade_provides_correct_method_signatures()
     {
         $client = ApiCheck::getFacadeRoot();
@@ -73,7 +74,7 @@ class FacadeTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function facade_can_be_swapped_for_testing()
     {
         $mock = $this->createMock(ApiClient::class);
@@ -83,7 +84,7 @@ class FacadeTest extends TestCase
         $this->assertSame($mock, ApiCheck::getFacadeRoot());
     }
 
-    /** @test */
+    #[Test]
     public function facade_can_be_spied_for_testing()
     {
         $spy = ApiCheck::spy();

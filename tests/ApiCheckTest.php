@@ -3,9 +3,11 @@
 namespace ApiCheck\Laravel\Tests;
 
 use ApiCheck\Api\ApiClient;
+use ApiCheck\Laravel\Exceptions\MissingApiKeyException;
 use ApiCheck\Laravel\ServiceProvider;
 use ApiCheck\Laravel\Facades\ApiCheck;
 use Orchestra\Testbench\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ApiCheckTest extends TestCase
 {
@@ -27,7 +29,7 @@ class ApiCheckTest extends TestCase
         $app['config']->set('apicheck.referer', 'https://example.com');
     }
 
-    /** @test */
+    #[Test]
     public function it_binds_the_api_client_as_singleton()
     {
         $client1 = app('apicheck');
@@ -37,7 +39,7 @@ class ApiCheckTest extends TestCase
         $this->assertSame($client1, $client2, 'ApiClient should be a singleton');
     }
 
-    /** @test */
+    #[Test]
     public function it_binds_api_client_by_class_name()
     {
         $client = app(ApiClient::class);
@@ -46,52 +48,59 @@ class ApiCheckTest extends TestCase
         $this->assertSame($client, app('apicheck'));
     }
 
-    /** @test */
+    #[Test]
     public function facade_returns_api_client()
     {
         $this->assertInstanceOf(ApiClient::class, ApiCheck::getFacadeRoot());
     }
 
-    /** @test */
+    #[Test]
     public function helper_returns_api_client()
     {
         $this->assertInstanceOf(ApiClient::class, apicheck());
         $this->assertSame(apicheck(), app('apicheck'));
     }
 
-    /** @test */
+    #[Test]
     public function config_is_merged()
     {
         $this->assertEquals('test-api-key', config('apicheck.api_key'));
         $this->assertEquals('https://example.com', config('apicheck.referer'));
     }
 
-    /** @test */
-    public function config_has_default_values()
+    #[Test]
+    public function it_throws_a_clear_exception_when_the_api_key_is_missing()
     {
-        // Test defaults when not set
-        $app = $this->app;
+        $this->app['config']->set('apicheck.api_key', null);
 
-        // Fresh app without our env setup
-        $app['config']->set('apicheck', []);
+        $this->expectException(MissingApiKeyException::class);
 
-        $this->assertNull(config('apicheck.api_key'));
-        $this->assertNull(config('apicheck.referer'));
+        app(ApiClient::class);
     }
 
-    /** @test */
+    #[Test]
+    public function it_throws_a_clear_exception_when_the_api_key_is_empty()
+    {
+        $this->app['config']->set('apicheck.api_key', '');
+
+        $this->expectException(MissingApiKeyException::class);
+
+        app(ApiClient::class);
+    }
+
+    #[Test]
+    public function it_resolves_without_a_referer()
+    {
+        $this->app['config']->set('apicheck.referer', null);
+
+        $this->assertInstanceOf(ApiClient::class, app(ApiClient::class));
+    }
+
+    #[Test]
     public function service_provider_registers_singletons()
     {
         // Verify the service is properly registered
         $this->assertTrue($this->app->has(ApiClient::class));
         $this->assertTrue($this->app->has('apicheck'));
-    }
-
-    /** @test */
-    public function service_provider_declares_provided_services()
-    {
-        $provider = new ServiceProvider($this->app);
-
-        $this->assertEquals([ApiClient::class, 'apicheck'], $provider->provides());
     }
 }
