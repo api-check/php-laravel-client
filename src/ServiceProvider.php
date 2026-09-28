@@ -12,7 +12,7 @@ class ServiceProvider extends BaseServiceProvider
     /**
      * Package version.
      */
-    public const PACKAGE_VERSION = '2.1.0';
+    public const PACKAGE_VERSION = '3.0.0';
 
     /**
      * Boot the service provider.

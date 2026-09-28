@@ -6,8 +6,10 @@ ApiCheck helps you validate customer data - addresses, emails, and phone numbers
 
 ## Requirements
 
-- PHP 8.1+
-- Laravel 10.x | 11.x | 12.x
+- PHP 8.2+
+- Laravel 12.x
+
+Using Laravel 10 or 11? Use version 2.x of this package (`composer require api-check/php-laravel-client:^2.0`).
 - An ApiCheck API key ([get one here](https://app.apicheck.nl/authentication/register))
 
 ## Installation
