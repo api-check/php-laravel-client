@@ -3,6 +3,7 @@
 namespace ApiCheck\Laravel;
 
 use ApiCheck\Api\ApiClient;
+use ApiCheck\Laravel\Exceptions\MissingApiKeyException;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
@@ -11,14 +12,16 @@ class ServiceProvider extends BaseServiceProvider
     /**
      * Package version.
      */
-    public const PACKAGE_VERSION = '2.0.0';
+    public const PACKAGE_VERSION = '2.1.0';
 
     /**
      * Boot the service provider.
      */
     public function boot(): void
     {
-        $this->setupConfig();
+        if ($this->app->runningInConsole()) {
+            $this->publishes([$this->configPath() => config_path('apicheck.php')], 'apicheck-config');
+        }
     }
 
     /**
@@ -26,21 +29,17 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function register(): void
     {
+        $this->mergeConfigFrom($this->configPath(), 'apicheck');
+
         $this->registerApiClient();
     }
 
     /**
-     * Setup the configuration.
+     * Get the path to the package configuration file.
      */
-    protected function setupConfig(): void
+    protected function configPath(): string
     {
-        $source = realpath(__DIR__ . '/../config/apicheck.php');
-
-        if ($this->app->runningInConsole()) {
-            $this->publishes([$source => config_path('apicheck.php')], 'apicheck-config');
-        }
-
-        $this->mergeConfigFrom($source, 'apicheck');
+        return realpath(__DIR__ . '/../config/apicheck.php');
     }
 
     /**
@@ -49,8 +48,14 @@ class ServiceProvider extends BaseServiceProvider
     protected function registerApiClient(): void
     {
         $this->app->singleton(ApiClient::class, function (Container $app) {
+            $apiKey = $app['config']->get('apicheck.api_key');
+
+            if (! is_string($apiKey) || $apiKey === '') {
+                throw MissingApiKeyException::create();
+            }
+
             $client = new ApiClient();
-            $client->setApiKey($app['config']->get('apicheck.api_key'));
+            $client->setApiKey($apiKey);
 
             if ($referer = $app['config']->get('apicheck.referer')) {
                 $client->setReferer($referer);
@@ -60,13 +65,5 @@ class ServiceProvider extends BaseServiceProvider
         });
 
         $this->app->alias(ApiClient::class, 'apicheck');
-    }
-
-    /**
-     * Get the services provided by the provider.
-     */
-    public function provides(): array
-    {
-        return [ApiClient::class, 'apicheck'];
     }
 }
